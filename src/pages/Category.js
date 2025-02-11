@@ -8,11 +8,12 @@ const ProductGrid = React.lazy(() => import("../components/commonComp/ProductGri
 
 const Category = () => {
 	const location = useLocation();
+	const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 	// API endpoint based on URL
 	const itemUrl = useMemo(
-		() => `http://localhost:5000/api${location.pathname.substring(9)}`,
-		[location.pathname]
+		() => `${API_URL}/api${location.pathname.substring(9)}`,
+		[location.pathname, API_URL]
 	);
 
 	// Fetch products data using custom hook
@@ -35,24 +36,24 @@ const Category = () => {
 	}, [location.pathname]); // Runs every time category (URL path) changes
 
 	// Handle filter changes
-	const handlCategoryChange = (category) => {
-		setSelectedCategories((prev) =>
-			prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-		);
-	};
+	// const handlCategoryChange = (category) => {
+	// 	setSelectedCategories((prev) =>
+	// 		prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+	// 	);
+	// };
 	const handlePriceChange = (newPriceRange) => {
 		setPriceRange(newPriceRange);
 	};
-	const handleSelectedSizes = (size) => {
-		setSelectedSizes((prev) =>
-			prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-		);
-	};
-	const handleSelectedColors = (color) => {
-		setSelectedColors((prev) =>
-			prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
-		);
-	};
+	// const handleSelectedSizes = (size) => {
+	// 	setSelectedSizes((prev) =>
+	// 		prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+	// 	);
+	// };
+	// const handleSelectedColors = (color) => {
+	// 	setSelectedColors((prev) =>
+	// 		prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+	// 	);
+	// };
 
 	// 5️⃣ Filter products based on price range (assuming products have a `price` field)
 	const filteredProducts = useMemo(() => {
@@ -67,7 +68,7 @@ const Category = () => {
 				(selectedColors.length === 0 || selectedColors.includes(product.color))
 			);
 		});
-	}, [products, priceRange]); // ✅ Runs when `products` OR `priceRange` change
+	}, [products, priceRange, selectedCategories, selectedColors, selectedSizes]); // ✅ Runs when `products` OR `priceRange` change
 
 	const [accordionState, setAccordionState] = useState({
 		product: true,
